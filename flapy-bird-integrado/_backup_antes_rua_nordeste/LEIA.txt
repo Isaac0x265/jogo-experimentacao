@@ -1,0 +1,2 @@
+Copia dos arquivos ANTES de adicionar a Rua do Nordeste e os obstaculos (14/11/2026).
+Para voltar: copie estes arquivos de volta para scenes/ e scripts/.
