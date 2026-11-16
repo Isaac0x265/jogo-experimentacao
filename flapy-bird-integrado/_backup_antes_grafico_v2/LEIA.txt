@@ -1,2 +1,0 @@
-Copia dos scripts/cenas ANTES da melhoria grafica (14/11/2026).
-Para voltar: copie de volta para scripts/ e scenes/.
