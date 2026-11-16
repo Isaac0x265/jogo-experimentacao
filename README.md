@@ -1,45 +1,74 @@
-# FlapyBirdIntegrado — arquivo de backup
+# FlapyBirdIntegrado
 
-Esta branch `backup` preserva o projeto encontrado em 16/11/2026, incluindo
-as duas pastas de cópias antigas e o ZIP original do primeiro commit.
-Para desenvolver, use a branch `atual` (`git switch atual`).
+Jogo 2D em Godot com um gato voador, obstáculos ambientais e três fases:
+Rua do Nordeste, Fortaleza e Rio de Janeiro. Inclui menu, seleção de skin,
+pontuação, transição de cenários e mensagens de conscientização.
 
-## O que foi preservado
+Esta é a branch `atual`, destinada ao desenvolvimento. O ZIP original e as
+cópias históricas estão preservados na branch `backup`.
 
-| Caminho | Conteúdo |
+## Abrir o projeto
+
+1. Importe `flapy-bird-integrado/project.godot` no Godot. A configuração
+   existente declara a versão 4.7 e o renderizador Forward Plus.
+2. Execute o projeto com F5 para iniciar pelo menu.
+3. No jogo, use Espaço, seta para cima, W, clique ou toque para voar.
+   Esc retorna ao menu.
+
+O editor recria o cache `.godot/` ao importar o projeto.
+
+## Estrutura
+
+| Caminho dentro de `flapy-bird-integrado/` | Responsabilidade |
 | --- | --- |
-| `flapy-bird-integrado.zip` | Pacote original, recuperado sem alterações do commit `64d3415`. Inclui código, recursos, backups e cache da época. |
-| `flapy-bird-integrado/project.godot` | Configuração do projeto atual, com entrada em `scenes/menu.tscn`. |
-| `flapy-bird-integrado/scripts/` | Lógica atual do jogo, menu, personagem, obstáculos, cenários e skins. |
-| `flapy-bird-integrado/scenes/` | Cenas atuais e cenário procedural anterior mantido como recurso. |
-| `flapy-bird-integrado/assets/` | Imagens, fonte e licença usadas pelo projeto. |
-| `flapy-bird-integrado/_backup_antes_rua_nordeste/` | Cópia parcial anterior à inclusão da Rua do Nordeste e dos obstáculos, datada de 14/11/2026 no `LEIA.txt`. |
-| `flapy-bird-integrado/_backup_antes_grafico_v2/` | Cópia parcial anterior à melhoria gráfica, datada de 14/11/2026 no `LEIA.txt`. |
+| `project.godot` | Configuração, cena inicial `scenes/menu.tscn` e autoload `Skins`. |
+| `scenes/` | Menu, partida, personagem, obstáculos, projéteis e cenários. |
+| `scripts/main.gd` | Fases, pontuação, geração de obstáculos, mensagens e efeitos. |
+| `scripts/player.gd` | Movimento, entrada, animação e estados do personagem. |
+| `scripts/menu.gd`, `scripts/menu_cursor.gd` | Navegação do menu e seleção de skin. |
+| `scripts/skins.gd` | Catálogo de skins e persistência da seleção. |
+| `scripts/obstaculo.gd`, `scripts/projetil.gd` | Obstáculos e objetos no ar. |
+| `scripts/scenery.gd`, `scripts/scenery_layer.gd` | Rolagem e desenho do cenário procedural. |
+| `assets/` | Imagens de cenários, personagem, obstáculos e interface; fonte e licença. |
 
-As pastas `_backup_*` não são projetos completos nem versões independentes
-executáveis. Elas preservam apenas alguns scripts e cenas. Os arquivos `.gd`
-correspondem a `scripts/` e os `.tscn` a `scenes/`; compare as diferenças antes
-de restaurá-los. Os dois conjuntos representam momentos distintos e não devem
-ser sobrepostos indiscriminadamente.
+`scenes/scenery.tscn` e `scripts/scenery_layer.gd` formam um cenário procedural
+anterior. Foram mantidos como recursos do projeto: não são cópias nas pastas
+de backup, embora as três fases atuais utilizem cenas específicas.
 
-Na comparação do ZIP com a pasta local, os 356 arquivos presentes em ambos
-eram idênticos byte a byte. Os 55 arquivos do ZIP ausentes localmente eram
-somente caches de shaders em `.godot/`.
+As configurações `*.import` e os identificadores `*.gd.uid` são versionados.
+O diretório `.godot/` é cache local e fica ignorado pelo Git.
 
-## Arquivos auxiliares
+## Branches e backups
 
-- `.godot/`: cache e estado local do editor; ignorados pelo Git fora do ZIP.
-- `*.import`: configurações de importação dos recursos; mantidas no Git.
-- `*.gd.uid`: identificadores dos scripts; mantidos no Git.
-- `.editorconfig`, `.gitattributes`, `.gitignore`: configuração do projeto e do Git.
+| Branch | Conteúdo |
+| --- | --- |
+| `atual` | Projeto organizado para desenvolvimento, sem ZIP nem pastas de backup. |
+| `backup` | Projeto preservado, ZIP original e as duas pastas `_backup_antes_*`. |
+| `main` | Commit original `64d3415`, contendo somente o ZIP. |
 
-## Branches
+Na branch `backup`, dentro de `flapy-bird-integrado/`:
 
-- `backup`: fotografia de preservação, com o ZIP e as cópias históricas.
-- `atual`: projeto para desenvolvimento, sem o ZIP e sem as pastas `_backup_*`.
-- `main`: permanece no commit original, que continha somente o ZIP.
+- `_backup_antes_rua_nordeste/`: scripts e cenas anteriores à inclusão da Rua
+  do Nordeste e dos obstáculos, conforme o `LEIA.txt` de 14/11/2026.
+- `_backup_antes_grafico_v2/`: scripts e cenas anteriores à melhoria gráfica,
+  conforme o `LEIA.txt` de 14/11/2026.
 
-Salve suas alterações em um commit antes de trocar de branch. Use
-`git switch backup` para consultar este arquivo e `git switch atual` para
-retomar o desenvolvimento. Novas versões devem ser registradas com commits,
-evitando novas pastas de backup dentro do projeto.
+Essas pastas são cópias parciais, não projetos completos executáveis.
+O README da branch `backup` detalha a preservação e a comparação com o ZIP.
+
+Para consultar o backup e depois voltar ao desenvolvimento:
+
+```sh
+git switch backup
+git switch atual
+```
+
+Salve alterações em um commit antes de trocar de branch. Registre novas
+versões com commits em vez de criar outras pastas de backup no projeto.
+
+## Verificação da organização
+
+O código, as cenas e os recursos da versão atual foram preservados. Foram
+verificadas 43 referências diretas a recursos, sem arquivos faltando.
+A execução do jogo não foi testada: o executável do Godot não estava
+disponível no PATH do ambiente utilizado para esta organização.
