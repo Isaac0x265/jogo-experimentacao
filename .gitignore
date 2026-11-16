@@ -1,0 +1,7 @@
+# Cache local do Godot; recriado pelo editor.
+.godot/
+
+# Arquivos locais do sistema operacional.
+.DS_Store
+Thumbs.db
+Desktop.ini
