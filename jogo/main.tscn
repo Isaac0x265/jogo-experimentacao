@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cg7ftsw0i7bru"]
+
+[ext_resource type="Script" uid="uid://vc4fvdpfsykc" path="res://jogo/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://personagem/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://cenarios/scenery_rua.tscn" id="3_scenery"]
+[ext_resource type="Texture2D" uid="uid://dqfsji0vq4dvf" path="res://assets/ui/sombra_gato.png" id="4_sombra"]
+[ext_resource type="PackedScene" path="res://jogo/hud.tscn" id="5_hud"]
+[ext_resource type="Script" uid="uid://bps7ssfhhbjcp" path="res://luva/tech_glove.gd" id="7_o6xl0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(288, 72)
+
+[node name="Main" type="Node2D" unique_id=1950709055]
+script = ExtResource("1_main")
+
+[node name="Scenery" parent="." unique_id=2046422496 instance=ExtResource("3_scenery")]
+horizon_y = 380.0
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=890234641]
+position = Vector2(144, 476)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=843974167]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="SombraGato" type="Sprite2D" parent="." unique_id=723030084]
+position = Vector2(80, 441)
+texture = ExtResource("4_sombra")
+
+[node name="Obstaculos" type="Node2D" parent="." unique_id=2134269674]
+
+[node name="Efeitos" type="Node2D" parent="." unique_id=1968254651]
+
+[node name="Player" parent="." unique_id=477310817 instance=ExtResource("2_player")]
+position = Vector2(80, 220)
+
+[node name="UI" parent="." instance=ExtResource("5_hud")]
+
+[node name="TechGlove" type="Node" parent="." unique_id=1008542117]
+script = ExtResource("7_o6xl0")

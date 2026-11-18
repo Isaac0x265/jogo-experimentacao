@@ -1,0 +1,468 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://jogo/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" path="res://assets/ui/pino.png" id="2_pino"]
+[ext_resource type="Texture2D" path="res://assets/ui/folha.png" id="3_folha"]
+
+[sub_resource type="StyleBoxFlat" id="SB_chip"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+bg_color = Color(0.992, 0.965, 0.914, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.541, 0.373, 0.29, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0.2, 0.12, 0.1, 0.3)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="StyleBoxFlat" id="SB_placar"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.992, 0.965, 0.914, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.541, 0.373, 0.29, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.2, 0.12, 0.1, 0.3)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="StyleBoxFlat" id="SB_card"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.992, 0.965, 0.914, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.541, 0.373, 0.29, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0.2, 0.12, 0.1, 0.35)
+shadow_offset = Vector2(2, 3)
+
+[sub_resource type="StyleBoxFlat" id="SB_barra_fundo"]
+bg_color = Color(0.914, 0.839, 0.741, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="SB_barra_cheia"]
+bg_color = Color(0.608, 0.78, 0.478, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="LabelSettings" id="LS_marrom16"]
+font_color = Color(0.541, 0.373, 0.29, 1)
+
+[sub_resource type="LabelSettings" id="LS_marrom8"]
+font_size = 8
+font_color = Color(0.541, 0.373, 0.29, 1)
+
+[sub_resource type="LabelSettings" id="LS_corpo"]
+line_spacing = 3.0
+font_size = 8
+font_color = Color(0.42, 0.29, 0.22, 1)
+
+[sub_resource type="LabelSettings" id="LS_creme16"]
+font_color = Color(1, 0.973, 0.925, 1)
+outline_size = 4
+outline_color = Color(0.541, 0.373, 0.29, 1)
+
+[sub_resource type="LabelSettings" id="LS_creme8"]
+line_spacing = 4.0
+font_size = 8
+font_color = Color(1, 0.973, 0.925, 1)
+outline_size = 3
+outline_color = Color(0.541, 0.373, 0.29, 1)
+
+[sub_resource type="LabelSettings" id="LS_mult"]
+font_size = 8
+font_color = Color(1, 0.973, 0.925, 1)
+outline_size = 3
+outline_color = Color(0.541, 0.373, 0.29, 1)
+
+[sub_resource type="LabelSettings" id="LS_vermelho16"]
+line_spacing = 2.0
+font_color = Color(0.78, 0.25, 0.2, 1)
+
+[sub_resource type="LabelSettings" id="LS_vermelho8"]
+font_size = 8
+font_color = Color(0.78, 0.25, 0.2, 1)
+
+[sub_resource type="LabelSettings" id="LS_laranja8"]
+font_size = 8
+font_color = Color(0.8, 0.47, 0.18, 1)
+
+[sub_resource type="LabelSettings" id="LS_verde8"]
+font_size = 8
+font_color = Color(0.33, 0.56, 0.24, 1)
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Flash" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_right = 288.0
+offset_bottom = 512.0
+mouse_filter = 2
+color = Color(1, 0.98, 0.94, 1)
+
+[node name="Escurecer" type="ColorRect" parent="."]
+visible = false
+offset_right = 288.0
+offset_bottom = 512.0
+mouse_filter = 2
+color = Color(0.12, 0.07, 0.1, 0.55)
+
+[node name="Topo" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 288.0
+offset_bottom = 56.0
+mouse_filter = 2
+
+[node name="FaseChip" type="PanelContainer" parent="Topo"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 60.0
+offset_bottom = 38.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("SB_chip")
+
+[node name="VBox" type="VBoxContainer" parent="Topo/FaseChip"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Linha" type="HBoxContainer" parent="Topo/FaseChip/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Pino" type="TextureRect" parent="Topo/FaseChip/VBox/Linha"]
+layout_mode = 2
+texture = ExtResource("2_pino")
+stretch_mode = 5
+
+[node name="FaseTxt" type="Label" parent="Topo/FaseChip/VBox/Linha"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "1/3"
+label_settings = SubResource("LS_marrom8")
+
+[node name="Progresso" type="ProgressBar" parent="Topo/FaseChip/VBox"]
+custom_minimum_size = Vector2(44, 6)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("SB_barra_fundo")
+theme_override_styles/fill = SubResource("SB_barra_cheia")
+max_value = 10.0
+show_percentage = false
+
+[node name="RecordeChip" type="PanelContainer" parent="Topo"]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 6.0
+offset_right = 284.0
+offset_bottom = 38.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("SB_chip")
+
+[node name="VBox" type="VBoxContainer" parent="Topo/RecordeChip"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Titulo" type="Label" parent="Topo/RecordeChip/VBox"]
+layout_mode = 2
+text = "RECORDE"
+label_settings = SubResource("LS_marrom8")
+horizontal_alignment = 1
+
+[node name="Valor" type="Label" parent="Topo/RecordeChip/VBox"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LS_marrom8")
+horizontal_alignment = 1
+
+[node name="Placar" type="PanelContainer" parent="Topo"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 6.0
+offset_right = 178.0
+offset_bottom = 34.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("SB_placar")
+
+[node name="HBox" type="HBoxContainer" parent="Topo/Placar"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Folha" type="TextureRect" parent="Topo/Placar/HBox"]
+layout_mode = 2
+texture = ExtResource("3_folha")
+stretch_mode = 5
+
+[node name="Pontos" type="Label" parent="Topo/Placar/HBox"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LS_marrom16")
+vertical_alignment = 1
+
+[node name="Combo" type="HBoxContainer" parent="Topo"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 288.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="Mult" type="Label" parent="Topo/Combo"]
+layout_mode = 2
+text = "x1"
+label_settings = SubResource("LS_mult")
+
+[node name="Pip1" type="ColorRect" parent="Topo/Combo"]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Pip2" type="ColorRect" parent="Topo/Combo"]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Pip3" type="ColorRect" parent="Topo/Combo"]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Dica" type="VBoxContainer" parent="."]
+offset_top = 292.0
+offset_right = 288.0
+offset_bottom = 352.0
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Titulo" type="Label" parent="Dica"]
+layout_mode = 2
+text = "TOQUE PARA VOAR"
+label_settings = SubResource("LS_creme16")
+horizontal_alignment = 1
+
+[node name="Sub" type="Label" parent="Dica"]
+layout_mode = 2
+text = "MEIO DO BURACO = PERFEITO!
+FOLHA = PONTOS EXTRAS"
+label_settings = SubResource("LS_creme8")
+horizontal_alignment = 1
+
+[node name="FaseBanner" type="PanelContainer" parent="."]
+offset_left = 34.0
+offset_top = -80.0
+offset_right = 254.0
+offset_bottom = -20.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("SB_card")
+
+[node name="VBox" type="VBoxContainer" parent="FaseBanner"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Topo" type="HBoxContainer" parent="FaseBanner/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Pino" type="TextureRect" parent="FaseBanner/VBox/Topo"]
+layout_mode = 2
+texture = ExtResource("2_pino")
+stretch_mode = 5
+
+[node name="Numero" type="Label" parent="FaseBanner/VBox/Topo"]
+layout_mode = 2
+text = "FASE 2"
+label_settings = SubResource("LS_vermelho8")
+vertical_alignment = 1
+
+[node name="Nome" type="Label" parent="FaseBanner/VBox"]
+layout_mode = 2
+text = "FORTALEZA"
+label_settings = SubResource("LS_marrom16")
+horizontal_alignment = 1
+
+[node name="Fim" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(256, 0)
+offset_left = 16.0
+offset_top = 60.0
+offset_right = 272.0
+offset_bottom = 420.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("SB_card")
+
+[node name="VBox" type="VBoxContainer" parent="Fim"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icone" type="TextureRect" parent="Fim/VBox"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+
+[node name="Titulo" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "TITULO"
+label_settings = SubResource("LS_vermelho16")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Aconteceu" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "o que aconteceu"
+label_settings = SubResource("LS_corpo")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Linha1" type="ColorRect" parent="Fim/VBox"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.914, 0.839, 0.741, 1)
+
+[node name="ImportaTitulo" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "POR QUE IMPORTA?"
+label_settings = SubResource("LS_laranja8")
+horizontal_alignment = 1
+
+[node name="Importa" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "texto"
+label_settings = SubResource("LS_corpo")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="AjudarTitulo" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "COMO AJUDAR"
+label_settings = SubResource("LS_verde8")
+horizontal_alignment = 1
+
+[node name="Ajudar" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "texto"
+label_settings = SubResource("LS_corpo")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Linha2" type="ColorRect" parent="Fim/VBox"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.914, 0.839, 0.741, 1)
+
+[node name="Stats" type="HBoxContainer" parent="Fim/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Pontos" type="VBoxContainer" parent="Fim/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Titulo" type="Label" parent="Fim/VBox/Stats/Pontos"]
+layout_mode = 2
+text = "PONTOS"
+label_settings = SubResource("LS_marrom8")
+horizontal_alignment = 1
+
+[node name="Valor" type="Label" parent="Fim/VBox/Stats/Pontos"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LS_marrom16")
+horizontal_alignment = 1
+
+[node name="Recorde" type="VBoxContainer" parent="Fim/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Titulo" type="Label" parent="Fim/VBox/Stats/Recorde"]
+layout_mode = 2
+text = "RECORDE"
+label_settings = SubResource("LS_marrom8")
+horizontal_alignment = 1
+
+[node name="Valor" type="Label" parent="Fim/VBox/Stats/Recorde"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LS_marrom16")
+horizontal_alignment = 1
+
+[node name="Fase" type="VBoxContainer" parent="Fim/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Titulo" type="Label" parent="Fim/VBox/Stats/Fase"]
+layout_mode = 2
+text = "FASE"
+label_settings = SubResource("LS_marrom8")
+horizontal_alignment = 1
+
+[node name="Valor" type="Label" parent="Fim/VBox/Stats/Fase"]
+layout_mode = 2
+text = "1/3"
+label_settings = SubResource("LS_marrom16")
+horizontal_alignment = 1
+
+[node name="Extra" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "PERFEITOS 0  FOLHAS 0  MAX x1"
+label_settings = SubResource("LS_marrom8")
+horizontal_alignment = 1
+
+[node name="NovoRecorde" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "NOVO RECORDE!"
+label_settings = SubResource("LS_laranja8")
+horizontal_alignment = 1
+
+[node name="Rodape" type="Label" parent="Fim/VBox"]
+layout_mode = 2
+text = "TOQUE PARA TENTAR DE NOVO"
+label_settings = SubResource("LS_verde8")
+horizontal_alignment = 1
+
+[node name="EscHint" type="Label" parent="."]
+offset_top = 492.0
+offset_right = 288.0
+offset_bottom = 504.0
+text = "ESPAÇO/CLIQUE VOA  -  ESC MENU"
+label_settings = SubResource("LS_creme8")
+horizontal_alignment = 1

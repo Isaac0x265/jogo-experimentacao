@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://obstaculos/projetil.gd" id="1_proj"]
+
+[sub_resource type="CircleShape2D" id="Shape_proj"]
+radius = 6.0
+
+[sub_resource type="LabelSettings" id="LS_alerta"]
+font_size = 16
+font_color = Color(1, 0.3, 0.25, 1)
+outline_size = 4
+outline_color = Color(0.541, 0.373, 0.29, 1)
+
+[node name="Projetil" type="Area2D"]
+script = ExtResource("1_proj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape_proj")
+
+[node name="Alerta" type="Label" parent="."]
+visible = false
+offset_left = -36.0
+offset_top = -10.0
+offset_right = -20.0
+offset_bottom = 10.0
+text = "!"
+label_settings = SubResource("LS_alerta")
+horizontal_alignment = 1
