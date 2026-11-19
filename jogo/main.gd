@@ -12,6 +12,7 @@ const TEX_FOLHA := preload("res://assets/ui/folha.png")
 ## Fases, textos educativos e dicas ficam em fases.gd (so dados, facil de editar).
 const DADOS := preload("res://jogo/fases.gd")
 
+@export var velocidade_mundo := 45.0        ## px/s do chao, dos obstaculos e das bolhas (era 60)
 @export var pontos_por_fase := 10           ## obstaculos que precisa passar para mudar de fase
 @export var fase_inicial := 0               ## 0 = Rua do Nordeste, 1 = Fortaleza, 2 = Rio (para testar)
 @export_group("Pontuacao")
@@ -26,7 +27,9 @@ const DADOS := preload("res://jogo/fases.gd")
 @export var luva_gravidade := 620.0         ## (normal 1000) gato cai mais devagar
 @export var luva_queda_max := 300.0         ## (normal 480)
 @export var luva_abertura := 150.0          ## (normal 112) buraco maior
-@export var luva_intervalo := 3.2           ## (normal 2.4) mais espaco entre os obstaculos
+## (normal 2.4) segundos entre obstaculos. Distancia entre eles = velocidade x tempo:
+## com o mundo mais devagar (45 px/s), 4.0 s mantem ~180 px, quase o mesmo de antes.
+@export var luva_intervalo := 4.0
 @export var luva_variacao_max := 70.0       ## buraco seguinte no maximo 70 px acima/abaixo do anterior
 @export var luva_aereos_desde_fase := 1     ## objetos voando so a partir da 2a fase (0 = desde a 1a)
 @export_group("Obstaculos")
@@ -45,6 +48,8 @@ const DADOS := preload("res://jogo/fases.gd")
 @export var alturas_bolhas: Array[float] = [150.0, 260.0, 370.0]   ## y de cada bolha (chao em y=440)
 @export var pontos_acerto := 3              ## (multiplicado pelo multiplicador)
 @export var erro_encerra_jogo := false      ## true = errar a conta derruba o gato, como bater num obstaculo
+@export var tempo_bolhas_paradas := 3.0     ## segundos que as bolhas ficam paradas na lateral da tela
+@export var x_bolhas_paradas := 240.0       ## onde elas param (a tela tem 288 px de largura)
 
 @onready var player: CharacterBody2D = $Player
 @onready var hud: CanvasLayer = $UI
@@ -72,6 +77,7 @@ var _obstaculos_desde_pergunta := 0   ## obstaculos criados desde a ultima colun
 var _acertos := 0                     ## contas certas nesta partida
 var _perguntas := 0                   ## contas que apareceram nesta partida
 var _conta_errada: Dictionary = {}    ## a conta que derrubou o gato (so com erro_encerra_jogo)
+var _em_pergunta := false             ## true enquanto as bolhas estao na tela (sem obstaculos)
 
 
 func _ready() -> void:
@@ -80,6 +86,7 @@ func _ready() -> void:
 		_aplicar_modo_luva()
 	recorde = _carregar_recorde()
 	_player_start_y = player.position.y
+	scenery.speed = velocidade_mundo
 	player.started.connect(_on_player_started)
 	player.died.connect(_on_player_died)
 	player.restarted.connect(_on_player_restarted)
@@ -126,6 +133,7 @@ func _trocar_cenario(indice: int, com_transicao: bool) -> void:
 	add_child(novo)
 	move_child(novo, antigo.get_index() + 1)    # logo acima do antigo, atras de tudo o resto
 	novo.scrolling = antigo.scrolling
+	novo.speed = velocidade_mundo               # cada cenario novo nasce com 60; usa a nossa
 	scenery = novo
 	if com_transicao:
 		novo.modulate.a = 0.0
@@ -178,12 +186,50 @@ func _contar_progresso() -> void:
 
 # ---------- Perguntas de matematica ----------
 
+## Comeca o "modo pergunta": para de criar obstaculos e limpa o caminho ate as bolhas.
+func _entrar_modo_pergunta() -> void:
+	_em_pergunta = true
+	_timer_obst.stop()
+	_timer_aereo.stop()
+	_tirar_obstaculos_da_frente()
+	_criar_pergunta()
+
+
+## Acabou a pergunta (acertou, errou ou passou direto): os obstaculos voltam.
+func _sair_modo_pergunta() -> void:
+	if _motivo != "":     # o gato caiu: nao volta a criar nada
+		return
+	_em_pergunta = false
+	# Cria o proximo obstaculo ja (se esperasse o timer, ficaria ~9 s sem nada na tela).
+	# call_deferred = "faz no fim deste quadro": quando o gato toca a bolha, o Godot esta
+	# no meio do calculo de colisoes e nao deixa criar outro objeto com colisao nessa hora.
+	_criar_obstaculo.call_deferred()
+	_timer_obst.start()
+	_timer_aereo.start(randf_range(aereo_min, aereo_max))
+
+
+## Some com os obstaculos e objetos voando que o gato ainda nao passou
+## (com um "puf"), para o caminho ate as bolhas ficar livre.
+func _tirar_obstaculos_da_frente() -> void:
+	for o in obstaculos.get_children():
+		var ainda_na_frente: bool = o.position.x > player.position.x - 30.0
+		if not ainda_na_frente:
+			continue
+		var y_do_puf: float = o.position.y
+		if "cima" in o:     # obstaculo de cima/baixo: o "puf" sai do meio do buraco
+			y_do_puf = (o.cima.position.y + o.baixo.position.y) / 2.0
+		_particulas(Vector2(o.position.x, y_do_puf), [Color("fff8ec"), Color("d9b98c")], 14, 90.0, 0.0)
+		o.queue_free()
+
+
 func _criar_pergunta() -> void:
 	var conta := CONTAS.sortear(fase)
 	var p := PERGUNTA.new()
 	p.position.x = 310.0                        # nasce fora da tela, a direita (igual ao obstaculo)
 	p.velocidade = scenery.speed
 	p.x_do_gato = player.position.x
+	p.x_parada = x_bolhas_paradas
+	p.tempo_parada = tempo_bolhas_paradas
 	obstaculos.add_child(p)                     # fica junto dos obstaculos: para e some com eles
 	p.configurar(conta, alturas_bolhas)
 	p.respondeu.connect(_on_respondeu.bind(p))
@@ -196,20 +242,22 @@ func _criar_pergunta() -> void:
 func _on_respondeu(acertou: bool, p: Node2D) -> void:
 	if _motivo != "":
 		return
-	if not acertou:
+	if acertou:
+		_acertos += 1
+		_particulas(player.position, [Color("fff8ec"), Color("8fd3ff")], 12, 80.0, 0.0)
+		_somar(pontos_acerto * _mult, "CERTO!", Color("9be08a"))
+		hud.resposta_pergunta(true, p.conta.expressao, p.conta.resposta)
+		_contar_progresso()
+	else:
 		_errou_conta(p.conta)
-		return
-	_acertos += 1
-	_particulas(player.position, [Color("fff8ec"), Color("8fd3ff")], 12, 80.0, 0.0)
-	_somar(pontos_acerto * _mult, "CERTO!", Color("9be08a"))
-	hud.resposta_pergunta(true, p.conta.expressao, p.conta.resposta)
-	_contar_progresso()
+	_sair_modo_pergunta()
 
 
 func _on_passou_sem_responder(p: Node2D) -> void:
 	if _motivo != "":
 		return
 	_errou_conta(p.conta)
+	_sair_modo_pergunta()
 
 
 ## Errou ou nao respondeu: mostra a resposta certa e o multiplicador volta para x1.
@@ -272,7 +320,7 @@ func _criar_obstaculo() -> void:
 	# A cada N obstaculos, o proximo espaco vira uma coluna de bolhas com uma conta.
 	if perguntas_ativas and _obstaculos_desde_pergunta >= obstaculos_entre_perguntas:
 		_obstaculos_desde_pergunta = 0
-		_criar_pergunta()
+		_entrar_modo_pergunta()
 		return
 	_obstaculos_desde_pergunta += 1
 	var f: Dictionary = DADOS.FASES[fase]
@@ -422,6 +470,7 @@ func _on_player_restarted() -> void:
 	_acertos = 0
 	_perguntas = 0
 	_conta_errada = {}
+	_em_pergunta = false
 	hud.inicio(recorde, fase, DADOS.FASES.size(), pontos_por_fase)
 
 

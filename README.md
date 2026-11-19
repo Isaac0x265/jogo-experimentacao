@@ -73,8 +73,13 @@ menu ──JOGAR──▶ jogo/main.tscn
                   │
                   ├─ o gato começa a voar (personagem/player.gd emite "started")
                   │
-                  ├─ a cada ~3 s o main.gd cria a próxima coisa na direita da tela:
+                  ├─ a cada ~4 s o main.gd cria a próxima coisa na direita da tela:
                   │     obstáculo, obstáculo, PERGUNTA, obstáculo, obstáculo, PERGUNTA...
+                  │
+                  ├─ PERGUNTA ("modo pergunta"):
+                  │     os obstáculos na frente do gato somem e nenhum novo aparece;
+                  │     as bolhas param na lateral direita por 3 s (o chão continua rolando)
+                  │     e depois andam até o gato; respondeu → os obstáculos voltam
                   │
                   ├─ passou pelo buraco ou acertou a conta → pontos + barra da fase anda
                   │     barra cheia → próxima fase (cenário e obstáculos mudam)
@@ -92,7 +97,8 @@ menu ──JOGAR──▶ jogo/main.tscn
 | mudar um texto educativo ou uma dica | `jogo/fases.gd` |
 | mudar quais obstáculos aparecem em cada fase | `jogo/fases.gd` (listas `cima`, `baixo`, `aereos`) |
 | mudar a dificuldade das contas | `perguntas/contas.gd` (função `sortear`) |
-| mudar velocidade, tamanho do buraco, pontos, contas a cada N obstáculos | nó **Main** no Inspector do Godot (abra `jogo/main.tscn`) |
+| mudar velocidade (`velocidade_mundo`), tamanho do buraco, pontos, contas a cada N obstáculos | nó **Main** no Inspector do Godot (abra `jogo/main.tscn`) |
+| mudar quanto tempo as bolhas ficam paradas | nó **Main** → *Perguntas de matematica* → `tempo_bolhas_paradas` |
 | fazer errar a conta derrubar o gato | nó **Main** → *Perguntas de matematica* → `erro_encerra_jogo` |
 | começar direto na fase 2 ou 3 (para testar) | nó **Main** → `fase_inicial` (0, 1 ou 2) |
 | adicionar uma skin | `personagem/skins.gd` (lista `LIST`) + imagens em `assets/skins/` |
